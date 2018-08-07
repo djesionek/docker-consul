@@ -12,10 +12,9 @@ ENV HASHICORP_RELEASES=https://releases.hashicorp.com
 RUN addgroup consul && \
     adduser -S -G consul consul
 
-
 # Set up certificates, base tools, and Consul.
 RUN set -eux && \
-    apk add --no-cache py-pip ca-certificates curl dumb-init gnupg libcap openssl su-exec && \
+    apk add --no-cache ca-certificates curl dumb-init gnupg libcap openssl su-exec && \
     gpg --keyserver pgp.mit.edu --recv-keys 91A6E7F85D05C65630BEF18951852D87348FFC4C && \
     mkdir -p /tmp/build && \
     cd /tmp/build && \
@@ -39,9 +38,6 @@ RUN set -eux && \
     rm -rf /root/.gnupg && \
 # tiny smoke test to ensure the binary we downloaded runs
     consul version
-
-RUN pip install --upgrade pip
-RUN pip install consulate
 
 # The /consul/data dir is used by Consul to store state. The agent will be started
 # with /consul/config as the configuration directory so you can add additional
@@ -79,4 +75,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 # By default you'll get an insecure single-node development server that stores
 # everything in RAM, exposes a web UI and HTTP endpoints, and bootstraps itself.
 # Don't use this configuration for production.
-CMD ["agent", "-dev", "-client", "0.0.0.0"]
+CMD ["agent", "-client", "0.0.0.0"]

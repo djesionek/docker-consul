@@ -1,3 +1,10 @@
+# About this Fork
+
+This is a fork of Hashicorp's Consul docker-consul repository (further information below).
+It was modified to start the agent without the -dev argument so it persists data.
+
+It is available on docker-hub [djesionek/docker-consul](https://hub.docker.com/r/djesionek/docker-consul/)
+
 # About this Repo
 
 This is the Git repo of the Docker [official image](https://docs.docker.com/docker-hub/official_repos/) for [consul](https://registry.hub.docker.com/_/consul/). See [the Docker Hub page](https://registry.hub.docker.com/_/consul/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
