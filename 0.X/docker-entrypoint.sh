@@ -1,6 +1,14 @@
 #!/usr/bin/dumb-init /bin/sh
 set -e
 
+# Catching SIGTERM to Backup the kv store
+_term() { 
+  echo "Caught SIGTERM signal! Backing up kv store" 
+  consulate --api-host=127.0.0.1 kv backup -f /consul/data/backup.json
+}
+
+trap _term SIGTERM
+
 # Note above that we run dumb-init as PID 1 in order to reap zombie processes
 # as well as forward signals to all processes in its session. Normally, sh
 # wouldn't do either of these functions so we'd leak zombies as well as do
@@ -95,4 +103,14 @@ if [ "$1" = 'consul' ]; then
     set -- su-exec consul:consul "$@"
 fi
 
-exec "$@"
+exec "$@" &
+child=$!
+
+echo "Trying to restore k/v store"
+until consulate --api-host=127.0.0.1 kv backup -f /consul/data/backup.json
+do
+  sleep 2
+  echo "Retrying to restore..."
+done
+
+wait "$child"
