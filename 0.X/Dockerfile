@@ -75,4 +75,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 # By default you'll get an insecure single-node development server that stores
 # everything in RAM, exposes a web UI and HTTP endpoints, and bootstraps itself.
 # Don't use this configuration for production.
-CMD ["agent", "-client", "0.0.0.0"]
+CMD ["agent", "-ui", "-client", "0.0.0.0"]
